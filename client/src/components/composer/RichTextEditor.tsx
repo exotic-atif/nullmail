@@ -101,8 +101,13 @@ export function RichTextEditor({
   return (
     <div className="flex flex-col h-full">
       <EditorToolbar editor={editor} />
-      <div className="flex-1 overflow-y-auto bg-nm-surface/20 border border-nm-border-subtle rounded-b-2xl">
-        <EditorContent editor={editor} />
+      <div className="flex-1 overflow-y-auto bg-nm-surface/20 border border-nm-border-subtle rounded-b-2xl flex flex-col relative">
+        <EditorContent editor={editor} className="flex-1" />
+        <div className="px-5 pb-6 pt-8 mt-auto border-t border-nm-border-subtle/30 mx-4 opacity-50 select-none pointer-events-none">
+          <p className="text-sm text-nm-muted mb-1">Best regards,</p>
+          <p className="text-base font-semibold text-nm-text">Atif Arman</p>
+          <p className="text-xs font-medium text-nm-accent mt-0.5">Atif's Codeworks</p>
+        </div>
       </div>
     </div>
   );

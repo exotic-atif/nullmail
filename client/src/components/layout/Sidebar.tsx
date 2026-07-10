@@ -2,6 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { Mail, FileText, Users, Settings, X, PenSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
+import { APP_VERSION } from '@/lib/version';
 
 const navItems = [
   { to: '/', icon: PenSquare, label: 'Compose' },
@@ -89,7 +90,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <div className="px-3 pb-6 mt-auto border-t border-nm-border-subtle pt-4">
         <div className="px-5 mt-auto pt-2 pb-2 text-center opacity-40 hover:opacity-100 transition-opacity">
           <p className="text-nm-muted text-[11px] font-medium tracking-wide">
-            NullMail v1.0.0
+            NullMail {APP_VERSION}
           </p>
           <p className="text-[10px] text-nm-muted/50">The Null Projects</p>
         </div>

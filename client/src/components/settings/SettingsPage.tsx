@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { useThemeStore } from '@/store/themeStore';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { APP_VERSION } from '@/lib/version';
 
 export function SettingsPage() {
   const { theme, toggleTheme } = useThemeStore();
@@ -85,9 +86,9 @@ export function SettingsPage() {
           </h2>
         </div>
         <div className="p-4 rounded-2xl bg-nm-surface/40 border border-nm-border-subtle space-y-3">
-          <div className="flex justify-between items-center py-2 border-b border-white/5">
+          <div className="flex items-center justify-between py-2 border-b border-nm-border-subtle/50 pb-4">
             <span className="text-nm-text-secondary text-sm">Version</span>
-            <span className="text-nm-text font-medium text-sm">1.1.0</span>
+            <span className="text-nm-text font-medium text-sm">{APP_VERSION}</span>
           </div>
           <div className="flex items-center justify-between py-2 border-b border-white/5">
             <span className="text-nm-text-secondary text-sm">Ecosystem</span>

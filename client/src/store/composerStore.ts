@@ -23,6 +23,7 @@ interface ComposerStore {
   setSubject: (subject: string) => void;
   setHtml: (html: string) => void;
   addAttachment: (attachment: EmailAttachment) => void;
+  addFiles: (files: FileList | File[]) => void;
   removeAttachment: (id: string) => void;
   updateAttachmentProgress: (id: string, progress: number) => void;
   setPreviewMode: (mode: PreviewMode) => void;
@@ -63,6 +64,39 @@ export const useComposerStore = create<ComposerStore>()((set) => ({
       attachments: [...state.attachments, attachment],
       isDirty: true,
     })),
+
+  addFiles: (files) => {
+    set((state) => {
+      const MAX_SIZE = 25 * 1024 * 1024;
+      let currentTotalSize = state.attachments.reduce((sum, a) => sum + a.size, 0);
+      const newAttachments: EmailAttachment[] = [];
+      const generateId = () => `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+
+      Array.from(files).forEach((file) => {
+        if (currentTotalSize + file.size > MAX_SIZE) return;
+        currentTotalSize += file.size;
+
+        newAttachments.push({
+          id: generateId(),
+          file,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          preview: file.type.startsWith('image/')
+            ? URL.createObjectURL(file)
+            : undefined,
+          progress: 100,
+        });
+      });
+
+      if (newAttachments.length === 0) return state;
+
+      return {
+        attachments: [...state.attachments, ...newAttachments],
+        isDirty: true,
+      };
+    });
+  },
 
   removeAttachment: (id) =>
     set((state) => ({

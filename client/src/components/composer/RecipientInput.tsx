@@ -93,8 +93,12 @@ export function RecipientInput({
             }}
             onKeyDown={handleKeyDown}
             onFocus={() => setShowSuggestions(true)}
-            onBlur={() => {
-              setTimeout(() => setShowSuggestions(false), 200);
+            onBlur={(e) => {
+              // If relatedTarget is null, it usually means the window lost focus (e.g. Alt-Tab)
+              // We only want to close suggestions if the user clicked somewhere else IN the document.
+              if (e.relatedTarget !== null) {
+                setTimeout(() => setShowSuggestions(false), 200);
+              }
               if (inputValue.trim() && isValidEmail(inputValue.trim())) {
                 addRecipient(inputValue);
               }

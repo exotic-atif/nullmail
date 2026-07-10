@@ -13,27 +13,13 @@ export function AttachmentZone() {
   const totalSize = attachments.reduce((sum, a) => sum + a.size, 0);
   const MAX_SIZE = 25 * 1024 * 1024;
 
+  const addFiles = useComposerStore((s) => s.addFiles);
+  
   const handleFiles = useCallback(
     (files: FileList | File[]) => {
-      Array.from(files).forEach((file) => {
-        if (totalSize + file.size > MAX_SIZE) return;
-
-        const attachment = {
-          id: generateId(),
-          file,
-          name: file.name,
-          size: file.size,
-          type: file.type,
-          preview: file.type.startsWith('image/')
-            ? URL.createObjectURL(file)
-            : undefined,
-          progress: 100,
-        };
-
-        addAttachment(attachment);
-      });
+      addFiles(files);
     },
-    [addAttachment, totalSize]
+    [addFiles]
   );
 
   const handleDrop = useCallback(

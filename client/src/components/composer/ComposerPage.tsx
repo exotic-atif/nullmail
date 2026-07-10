@@ -156,8 +156,55 @@ export function ComposerPage() {
     input.click();
   };
 
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    if (!isDraggingOver) setIsDraggingOver(true);
+  }, [isDraggingOver]);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+    setIsDraggingOver(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    if (e.dataTransfer.files.length) {
+      store.addFiles(e.dataTransfer.files);
+      setShowAttachments(true);
+    }
+  }, [store]);
+
   return (
-    <div className="h-full flex flex-col max-w-5xl mx-auto w-full">
+    <div 
+      className="h-full flex flex-col max-w-5xl mx-auto w-full relative"
+      onDragEnter={handleDragOver}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
+      <AnimatePresence>
+        {isDraggingOver && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-50 bg-nm-bg/80 backdrop-blur-sm border-2 border-dashed border-nm-accent/50 rounded-2xl flex items-center justify-center pointer-events-none"
+          >
+            <div className="flex flex-col items-center gap-4 text-nm-accent">
+              <div className="w-20 h-20 bg-nm-accent/10 rounded-full flex items-center justify-center">
+                <Upload size={32} />
+              </div>
+              <h2 className="text-2xl font-display font-bold">Drop to add attachment(s)</h2>
+              <p className="text-sm text-nm-text-tertiary">Files will be added to this email</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}

@@ -18,9 +18,14 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
       throw createError('Invalid token', 401);
     }
 
-    const isAdmin = user.user_metadata?.role === 'admin' || user.app_metadata?.role === 'admin';
+    // Check role in the 'users' table
+    const { data: userData } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
     
-    if (!isAdmin) {
+    if (userData?.role !== 'admin') {
       throw createError('Forbidden: Admin role required', 403);
     }
 

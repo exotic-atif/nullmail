@@ -21,13 +21,31 @@ const AuthContext = createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchUserRole = async (currentUser: User | null) => {
+      if (!currentUser) {
+        setIsAdmin(false);
+        setIsLoading(false);
+        return;
+      }
+      
+      const { data } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', currentUser.id)
+        .single();
+        
+      setIsAdmin(data?.role === 'admin');
+      setIsLoading(false);
+    };
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setIsLoading(false);
+      fetchUserRole(session?.user ?? null);
     });
 
     const {
@@ -35,7 +53,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setIsLoading(false);
+      setIsLoading(true);
+      fetchUserRole(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
@@ -44,10 +63,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
   };
-
-  // Check if user has admin role. 
-  // Depending on how NullWave sets it, it might be in user_metadata or app_metadata
-  const isAdmin = user?.user_metadata?.role === 'admin' || user?.app_metadata?.role === 'admin';
 
   return (
     <AuthContext.Provider value={{ session, user, isAdmin, isLoading, signOut }}>

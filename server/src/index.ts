@@ -28,9 +28,11 @@ app.use('/api/email', emailRoutes);
 // Error handling
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  logger.success(`NullMail server running on http://localhost:${PORT}`);
-  logger.info(`CORS origin: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    logger.success(`NullMail server running on http://localhost:${PORT}`);
+    logger.info(`CORS origin: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
+  });
+}
 
 export default app;

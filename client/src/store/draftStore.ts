@@ -29,11 +29,11 @@ export const useDraftStore = create<DraftStore>()((set, get) => ({
     if (!error && data) {
       const drafts: EmailDraft[] = data.map((d: any) => ({
         id: d.id,
-        to: d.to_recipients,
-        cc: d.cc_recipients,
-        bcc: d.bcc_recipients,
-        subject: d.subject,
-        html: d.html,
+        to: d.to_recipients || [],
+        cc: d.cc_recipients || [],
+        bcc: d.bcc_recipients || [],
+        subject: d.subject || '',
+        html: d.html || '',
         attachments: d.attachments || [],
         createdAt: d.created_at,
         updatedAt: d.updated_at,

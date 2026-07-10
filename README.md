@@ -1,6 +1,6 @@
-# NullMail 
+# NullMail
 
-**Version:** beta-1.0.6
+**Version:** beta-1.0.7
 
 NullMail is a modern, secure, database-backed webmail application. It allows authorized admins to securely compose and send emails wrapped in a beautifully branded custom HTML template.
 

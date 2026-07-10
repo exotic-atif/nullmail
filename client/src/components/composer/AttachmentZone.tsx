@@ -2,11 +2,10 @@ import { useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, X, Paperclip } from 'lucide-react';
 import { useComposerStore } from '@/store/composerStore';
-import { formatBytes, generateId, getFileIcon } from '@/lib/utils';
+import { formatBytes, getFileIcon } from '@/lib/utils';
 
 export function AttachmentZone() {
   const attachments = useComposerStore((s) => s.attachments);
-  const addAttachment = useComposerStore((s) => s.addAttachment);
   const removeAttachment = useComposerStore((s) => s.removeAttachment);
   const fileInputRef = useRef<HTMLInputElement>(null);
 

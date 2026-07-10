@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Save, ChevronDown, ChevronUp, Copy, Download, Upload, Type, Hash, Paperclip } from 'lucide-react';
 import { toast } from 'sonner';
 import { RecipientInput } from './RecipientInput';

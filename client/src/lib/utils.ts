@@ -28,6 +28,7 @@ export function stringToGradient(str: string): string {
 
 /** Get initials from a name or email */
 export function getInitials(nameOrEmail: string): string {
+  if (!nameOrEmail || typeof nameOrEmail !== 'string') return '?';
   const name = nameOrEmail.includes('@') ? nameOrEmail.split('@')[0] : nameOrEmail;
   if (!name) return '?';
   const parts = name.split(/[\s._-]+/);

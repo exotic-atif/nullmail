@@ -39,8 +39,9 @@ export function LoginPage() {
       return;
     }
 
-    const checkAdmin = data.user?.user_metadata?.role === 'admin' || data.user?.app_metadata?.role === 'admin';
-    if (!checkAdmin) {
+    const { data: userData } = await supabase.from('users').select('role').eq('id', data.user.id).single();
+
+    if (userData?.role !== 'admin') {
       toast.error('Access denied. You must be an admin to access NullMail.');
       await supabase.auth.signOut();
     }
